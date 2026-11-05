@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Список языков</h1>
+
+{% if language_list %}
+<ul>
+    {% for lang in language_list %}
+    <li>
+        <a href="">{{ lang.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Языков в библиотеке нет.</p>
+{% endif %}
+{% endblock %}

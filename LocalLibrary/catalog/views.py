@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Author, BookInstance, Genre, Language
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -128,7 +128,7 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre']
+    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     permission_required = 'catalog.add_book'
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
@@ -149,3 +149,29 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse('book-delete', args=[self.object.id]) + '?error=restricted'
             )
+class GenreListView(generic.ListView):
+    model = Genre
+    context_object_name = 'genre_list'
+    template_name = 'catalog/genre_list.html'
+    paginate_by = 10
+
+class LanguageListView(generic.ListView):
+    model = Language
+    context_object_name = 'language_list'
+    template_name = 'catalog/language_list.html'
+    paginate_by = 10
+
+class GenreCreate(PermissionRequiredMixin, CreateView):
+    model = Genre
+    fields = ['name']
+    permission_required = 'catalog.add_genre'
+
+class LanguageCreate(PermissionRequiredMixin, CreateView):
+    model = Language
+    fields = ['name']
+    permission_required = 'catalog.add_language'
+
+class BookInstanceCreate(PermissionRequiredMixin, CreateView):
+    model = BookInstance
+    fields = ['book', 'imprint', 'due_back', 'borrower', 'status']
+    permission_required = 'catalog.add_bookinstance'
